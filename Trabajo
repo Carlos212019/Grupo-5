@@ -100,3 +100,494 @@ int main() {
 
     return 0;
 }
+
+
+5.1 modelamiento y diseño de aplicaciónes con herramientas 
+
+
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+
+class Persona{
+private:
+    string nombre;
+    int edad;
+public:
+    Persona(string& n, int& e) : nombre(n), edad(e) {}
+
+
+    void set_edad(int& e) { edad = e;
+    }
+    void mostrar(){
+        cout << "Nombre: " << nombre << endl;
+        cout << "Edad: " << edad << endl;
+    }
+};
+
+
+int main() {
+    string nombre1 = "Juan";
+    string nombre2 = "Maria";
+    int edad1 = 30;
+    int edad2 = 25;
+
+
+    Persona persona1(nombre1, edad1);
+    Persona persona2(nombre2, edad2);
+
+
+    persona1.set_edad(edad1);
+    persona2.set_edad(edad2);
+
+
+    persona1.mostrar();
+    cout << endl;
+    persona2.mostrar();
+
+
+    return 0;
+}
+
+
+
+
+
+5.2  agregar referencias, punteros y autoreferencias 
+
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+
+class persona{
+    private:
+        string nombre;
+        int edad;
+// puntero a otra instancia de la misma clase
+        persona* pareja;
+    
+    public:
+        persona(string n, int e){
+            nombre=n;
+            edad=e;
+// inicializar el puntero a nulo
+            string* pareja = 0;
+        }
+        void setpareja(persona& p){
+// referencia a otra instancia de la misma clase
+            pareja = &p;
+        }
+        void setedad(int e){
+            edad=e;
+        }
+        void mostrar(){
+            cout<<"nombre: "<<nombre<<endl;
+            cout<<"edad: "<< edad<<endl;
+            if (pareja != 0){
+                cout<<"pareja: "<< pareja->nombre<<endl;
+            }
+        }
+};
+
+
+int main() {
+    persona persona1("Juan", 30);
+    persona persona2("Maria", 25);
+
+
+    persona1.setpareja(persona2);
+    persona2.setpareja(persona1);
+    
+
+
+    // autoreferencia
+    persona1.setpareja(persona1);
+
+
+    persona1.mostrar();
+    cout << endl;
+    persona2.mostrar();
+
+
+    return 0;
+}
+
+
+
+
+5.3 constructores y destructores de clase
+
+
+#include <iostream>
+using namespace std;
+class libro{
+    public:
+    string titulo;
+    string autor;
+    int anno;
+
+
+    // constructor 
+    libro(string t, string a, int an){
+        titulo =t;
+        autor=a;
+        anno= an;
+        cout<<" libro creado - titulado: "<<titulo<<endl;
+    }
+    //destructor
+    ~libro(){
+        cout<<"libro vendido - titulo: "<<titulo<<endl;
+    }
+};
+
+
+int main(){
+    libro libro1("cuidad de los perros","mario vargas llosa",2010);
+
+
+    cout<<"  autor: "<<libro1.autor<<" - anno "<<libro1.anno<<endl;
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+Ejercicios propuestos:----------------------&&&------&&&&&&
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#include <iostream>
+#include <string>
+#include <vector>
+
+
+
+
+using namespace std;
+
+
+
+
+class Fecha{
+    private:
+        int dd;
+        int mm;
+        int yy;
+    public:
+    Fecha(){}
+    Fecha(int dd,int mm,int yy){
+        this ->dd=dd;
+        this ->mm=mm;
+        this ->yy=yy;
+    }
+    void getFecha(){
+        cout<<dd <<" "<< mm <<" "<< yy<<endl;
+    }
+
+
+
+
+    void setDD(int dd) { this->dd = dd; }
+    int getDD() const { return dd; }
+
+
+
+
+    void setMM(int mm) { this->mm = mm; }
+    int getMM() const { return mm; }
+
+
+
+
+    void setYY(int yy) { this->yy = yy; }
+    int getYY() const { return yy; }
+
+
+
+
+};
+class Persona {
+private:
+    int edad;
+    string nom;
+    Fecha fechadenacimiento;
+public:
+    Persona(){}
+    Persona(int edad, string nom, Fecha fechadenacimiento) {
+        this ->edad=edad;
+        this ->nom=nom;
+        this ->fechadenacimiento=fechadenacimiento;
+    }
+    void setEdad(int edad) { this->edad = edad; }
+    int getEdad() const { return edad; }
+
+
+
+
+    void setNom(string nom) { this->nom = nom; }
+    string getNom() const { return nom; }
+
+
+
+
+    void setFechaDeNacimiento(Fecha fecha) { fechadenacimiento = fecha; }
+    Fecha getFechaDeNacimiento() const { return fechadenacimiento; }
+
+
+
+
+    bool esMayorDeEdad() const { return edad >= 18; }
+
+
+
+
+};
+class Visa {
+private:
+    Persona persona;
+    bool sello;
+    bool estado;
+    vector<Visa> visas;
+public:
+    Visa(Persona persona, bool sello, bool estado){
+        this->persona = persona;
+        this->sello = sello;
+        this->estado = estado;
+    }
+    //destructores
+    ~Visa() {
+        visas.clear();
+    }
+
+
+
+
+    void setSello(bool sello) { this->sello = sello; }
+    bool getSello() const { return sello; }
+
+
+
+
+    void setEstado(bool estado) { this->estado = estado; }
+    bool getEstado() const { return estado; }
+
+
+
+
+    vector<Visa> getVisas(){return visas;}
+    vector<Visa> setVisas(Visa visa){visas.push_back(visa);}
+
+
+
+
+    Visa& aprobado() {
+        estado = true;
+        return *this;
+    }
+    Visa& denegado() {
+        estado = false;
+        return *this;
+    }
+    Visa& sellado() {
+        sello = true;
+        return *this;
+    }
+    Persona getPersona() const { return persona; }
+};
+
+
+
+
+int main(){
+    vector<Visa> visas;
+    int opcion = 0;
+    while(true) {
+        cout << "seleccione una opcion:" << endl;
+        cout << "1. crear visa" << endl;
+        cout << "2. ver informacion de persona" << endl;
+        cout << "3. aprobar/Denegar visa" << endl;
+        cout << "4. salir" << endl;
+        cin >> opcion;
+
+
+
+
+        switch(opcion) {
+            case 1: {
+                int edad, dd, mm, yy;
+                string nom;
+
+
+
+
+                cout << "ingrese el nombre de la persona: ";
+                cin >> nom;
+
+
+
+
+                cout << "ingrese la edad de la persona: ";
+                cin >> edad;
+
+
+
+
+                cout << "ingrese la fecha de nacimiento de la persona en formato dd/mm/yyyy: ";
+                cin >> dd >> mm >> yy;
+                Fecha fechaNac(dd, mm, yy);
+
+
+
+
+                Persona p(edad, nom, fechaNac);
+
+
+
+
+                visas.push_back(Visa(p, false, false));
+
+
+
+
+                cout << "visa creada exitosa." << endl;
+
+
+
+
+                break;
+            }
+
+
+
+
+            case 2: {
+                int indice;
+
+
+
+
+                cout << "ingrese el indice de la visa: ";
+                cin >> indice;
+
+
+
+
+                const Persona& p = visas[indice].getPersona();
+
+
+
+
+                cout << "nombre: " << p.getNom() << endl;
+                cout << "edad: " << p.getEdad() << endl;
+                cout << "fecha de Nacimiento: ";
+                p.getFechaDeNacimiento().getFecha();
+
+
+
+
+                break;
+            }
+
+
+
+
+            case 3: {
+                int indice;
+                char decision;
+
+
+
+
+                cout << "Ingrese el indice de la visa: ";
+                cin >> indice;
+
+
+
+
+                const Persona& p = visas[indice].getPersona();
+                if(p.esMayorDeEdad()) {
+                    cout << "la persona es mayor de edad. Aprobado(a) (Y/N)";
+                    cin >> decision;
+
+
+
+
+                    if(decision == 'Y') {
+                        visas[indice].aprobado().sellado();
+                        cout << "visa aprobado y sellado." << endl;
+                        } else if (decision == 'N') {
+                        visas[indice].denegado().sellado();
+                        cout << "visa denegado y sellado." << endl;
+                    }
+                } else {
+                    visas[indice].denegado().sellado();
+                    cout << "La persona no es mayor de edad. visa denegado y sellado." << endl;
+                }
+
+
+
+
+                break;
+            }
+
+
+
+
+            case 4: {
+                cout <<"gracias por su visita" << endl;
+                return 0;
+            }
+
+
+
+
+            default:
+                cout << "opcion no valida, intente de nuevo." << endl;
+                break;
+        }
+    }
+
+
+
+
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
