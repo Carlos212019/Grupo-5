@@ -1,0 +1,102 @@
+
+4.3 código documentado
+
+class Computadora {
+private:
+    string modelo;
+    string fabricante;
+    int anio;
+    Computadora *siguiente;
+    Computadora *anterior;
+
+
+public:
+    // Constructor
+    Computadora(string m, string f, int a, Computadora *n = 0) :
+            modelo(m),
+            fabricante(f),
+            anio(a),
+            siguiente(n),
+            anterior(0) {}
+
+
+    // Destructor
+    ~Computadora() {
+        cout << "Eliminando la computadora " << modelo;
+    }
+
+
+    // Getters
+    string getModelo() {
+        return modelo;
+    }
+
+
+    string getFabricante() {
+        return fabricante;
+    }
+
+
+    int getAnio() {
+        return anio;
+    }
+
+
+    Computadora* getSiguiente() {
+        return siguiente;
+    }
+
+
+    Computadora* getAnterior() {
+        return anterior;
+    }
+
+
+    // Setters
+    void setSiguiente(Computadora* n) {
+        siguiente = n;
+    }
+
+
+    void setAnterior(Computadora* p) {
+        anterior = p;
+        if (p != 0 && p->siguiente != this) {
+            p->siguiente = this;
+        }
+    }
+};
+
+
+int main() {
+    Computadora *c1 = new Computadora("Mac", "Apple", 2022);
+    Computadora *c2 = new Computadora("Surface Book 3", "Microsoft", 2021);
+    Computadora *c3 = new Computadora("Yoga", "Lenovo", 2021);
+
+
+    c1->setSiguiente(c2);
+    c2->setSiguiente(c3);
+
+
+    c3->setAnterior(c2);
+    c2->setAnterior(c1);
+
+
+    // Imprimimos la información de cada computadora
+    Computadora *actual = c1;
+    while (actual != 0) {
+        cout << actual->getModelo() << " (" << actual->getFabricante() << ", " << actual->getAnio() << ")" << endl;
+        actual = actual->getSiguiente();
+    }
+
+
+    // Eliminamos las computadoras de la lista y liberamos su memoria
+    actual = c1;
+    while (actual != 0) {
+        Computadora *siguiente = actual->getSiguiente();
+        delete actual;
+        actual = siguiente;
+    }
+
+
+    return 0;
+}
